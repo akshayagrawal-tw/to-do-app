@@ -6,19 +6,13 @@ pipeline {
 
     stages {
 
-        stage("Docker Login") {
-            steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    sh "docker login -u ${user} -p ${pass}"
-                }
-            }
-        }
-
-        stage ('Build') {
+        stage ('Build and Tag Image') {
             when { expression { return params.Build }}
             steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
                     sh "docker build -t ${user}/to-do-app-alphas:${currentBuild.number} ."
                     sh "docker tag ${user}/to-do-app-alphas:${currentBuild.number} ${user}/to-do-app-alphas:latest"
+                }
             }
         }
 
@@ -26,10 +20,12 @@ pipeline {
         stage ('Push to registry') {
             when { expression { return params.Build }}
             steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
+                    sh "docker login -u ${user} -p ${pass}"
+                    sh "docker push ${user}/to-do-app-alphas:${currentBuild.number}"
                     sh "docker push ${user}/to-do-app-alphas:latest"
+                }
             }
-
-
         }
         stage ('Deploy') {
             steps {
