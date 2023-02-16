@@ -17,16 +17,7 @@ spec:
       containers:
         - name: to-do-app
           image: akshaytw/to-do-app-alphas:latest
-          env:
-            - name: USERNAME
-              valueFrom:
-                secretKeyRef:
-                  name: dockerhubsecrets
-                  key: username
-            - name: PASSWORD
-              valueFrom:
-                secretKeyRef:
-                  name: dockerhubsecrets
-                  key: password
           ports:
             - containerPort: 80
+      imagePullSecrets:
+        - name: dockersecrets
