@@ -39,6 +39,9 @@ pipeline {
                                    sh "aws eks update-kubeconfig --name alphas-cluster --region ap-southeast-1"
                                    sh "kubectl get nodes"
                                    sh "kubectl apply -f deployment/deployment.yml"
+                                   sh "kubectl apply -f deployment/service.yml"
+                                   sh "kubectl apply -f deployment/loadbalancer.yml"
+
                                }
             }
         }
