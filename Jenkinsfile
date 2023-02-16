@@ -38,6 +38,7 @@ pipeline {
                                secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
                                    sh "aws eks update-kubeconfig --name alphas-cluster --region ap-southeast-1"
                                    sh "kubectl get nodes"
+                                   sh "kubectl apply -f deployment/deployment.yml"
                                }
             }
         }
