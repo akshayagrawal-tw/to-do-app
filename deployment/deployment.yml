@@ -21,12 +21,12 @@ spec:
             - name: USERNAME
               valueFrom:
                 secretKeyRef:
-                  name: dockerHubSecrets
+                  name: dockerhubsecrets
                   key: username
             - name: PASSWORD
               valueFrom:
                 secretKeyRef:
-                  name: dockerHubSecrets
+                  name: dockerhubsecrets
                   key: password
           ports:
             - containerPort: 80
