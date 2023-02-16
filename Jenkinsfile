@@ -31,10 +31,14 @@ pipeline {
         }
         stage ('Deploy') {
             steps {
-                sh "docker stop to-do-app-alphas || true && docker rm to-do-app-alphas || true"
-                withCredentials([usernamePassword(credentialsId: 'dockerhub', passwordVariable: 'pass', usernameVariable: 'user')]) {
-                    sh "docker run -d -p 80:80  --name to-do-app-alphas ${user}/to-do-app-alphas:latest"
-                }
+               withCredentials([[
+                               $class: 'AmazonWebServicesCredentialsBinding',
+                               credentialsId: 'aws-secret',
+                               accessKeyVariable: 'AWS_ACCESS_KEY_ID',
+                               secretKeyVariable: 'AWS_SECRET_ACCESS_KEY']]){
+                                   sh "aws eks update-kubeconfig --name alphas-cluster --region ap-southeast-1"
+                                   sh "kubectl get nodes"
+                               }
             }
         }
     }
