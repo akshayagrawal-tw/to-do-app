@@ -1,0 +1,21 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: to-do-app
+  annotations:
+    kubernetes.io/change-cause: "alphas deployment to-do-app"
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: to-do-app-service
+  template:
+    metadata:
+      labels:
+        app: to-do-app-service
+    spec:
+      containers:
+        - name: to-do-app
+          image: akshaytw/to-do-app-alphas
+          ports:
+            - containerPort: 80
